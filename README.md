@@ -30,13 +30,15 @@ The second one was with:
 These modules are mandatory:
 
 
-* [PyTorch](https://pytorch.org/) (tests with version 1.5.0+cu92)
-* [TorchVision](https://pytorch.org/) (tests with version 0.6.1+cu92)
+* PyTorch (tests with version 1.5.0+cu92)
+* TorchVision (tests with version 0.6.1+cu92)
 * OpenCV (tests with version 4.0.1.24)
 * Numpy (tests with version 1.18.2)
 * PyGame (tests with version 1.9.6)
 * OpenGL (tests with version 3.1.0)
 * Pillow (tests with version 5.3.0)
+
+
 To install, use this command.
 
 ```bash
