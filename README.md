@@ -28,13 +28,23 @@ The second one was with:
 ### Python Modules
 
 These modules are mandatory:
+
+
 * [PyTorch](https://pytorch.org/) (tests with version 1.5.0+cu92)
-* [TorchVision](https://pytorch.org/) (tests with version 0.6.1+cu92) <br />
-To install Pytorch and TorchVision, use this command.
+* [TorchVision](https://pytorch.org/) (tests with version 0.6.1+cu92)
+* OpenCV (tests with version 4.0.1.24)
+* Numpy (tests with version 1.18.2)
+* PyGame (tests with version 1.9.6)
+* OpenGL (tests with version 3.1.0)
+* Pillow (tests with version 5.3.0)
+To install, use this command.
 
 ```bash
-pip install torch==1.5.1+cu92 torchvision==0.6.1+cu92 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==1.5.0+cu92 torchvision==0.6.0+cu92 -f https://download.pytorch.org/whl/torch_stable.html
+pip install opencv-python==4.0.1.24 numpy==1.18.2 pygame==1.9.6 pyopengl==3.1.0 pillow==5.3.0
 ```
+
+
 
 ## Usage
 
