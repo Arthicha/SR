@@ -1,13 +1,37 @@
-# Foobar
+# StreamingSR
 
-Foobar is a Python library for dealing with word pluralization.
+StreamingSR is a python program that . . .
 
-## Installation
+## Tested System
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+The program have been tested on two systems. The first one was with:
+* Window 10 operating system
+* Intel(R) Core(TM) i7-8750H CPU
+* NVIDIA GForce GTX 1050 GPU
+The second one was with:
+* Window 10 operating system
+* Intel(R) Core(TM) i5-8500 CPU
+* NVIDIA GForce RTX 2080 SUPER
+
+
+## Prerequisite
+
+### Applications & Programs
+
+* [Python 3.6.5](https://www.python.org/downloads/release/python-365/)
+* [Spout 2.006](https://spout.zeal.co/)
+* [Visual Studio](https://visualstudio.microsoft.com/downloads/)
+* [Boost](https://www.boost.org/)
+* [Spout-for-Python library](https://github.com/spiraltechnica/Spout-for-Python)
+
+### Python Modules
+
+These modules are mandatory:
+* [PyTorch](https://pytorch.org/) tests with version 1.5.0+cu92
+* [TorchVision](https://pytorch.org/) tests with version 0.6.1+cu92
 
 ```bash
-pip install foobar
+pip install torch==1.5.1+cu92 torchvision==0.6.1+cu92 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 ## Usage
@@ -19,11 +43,13 @@ foobar.pluralize('word') # returns 'words'
 foobar.pluralize('goose') # returns 'geese'
 foobar.singularize('phenomena') # returns 'phenomenon'
 ```
+### Usage
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
 
-Please make sure to update tests as appropriate.
+```bash
+pip install foobar
+```
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
