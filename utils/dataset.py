@@ -18,20 +18,24 @@ def random_crop(hr, size, scale):
     y = random.randint(0, h-size*scale)
     t = time.time()
     crop_hr = hr[y:y+size*scale, x:x+size*scale]
-    return crop_hr
+    crop_lr = cv2.resize(crop_hr,(size,size))
+    return crop_hr, crop_lr
 
 
-def random_flip_and_rotate(im1):
+def random_flip_and_rotate(im1,im2):
     if random.random() < 0.5:
         im1 = np.flipud(im1)
+        im2 = np.flipud(im2)
 
     if random.random() < 0.5:
         im1 = np.fliplr(im1)
+        im2 = np.fliplr(im2)
 
     angle = random.choice([0, 1, 2, 3])
     im1 = np.rot90(im1, angle)
+    im2 = np.rot90(im2, angle)
 
-    return im1
+    return im1, im2
 
 
 class TrainDataset(data.Dataset):
@@ -58,8 +62,8 @@ class TrainDataset(data.Dataset):
     def __getitem__(self, index):
         size = self.size
         item = [random_crop(hr, size, self.scale[0]) for hr in self.hr]
-        item = [random_flip_and_rotate(hr) for hr in item]
-        return item#[(self.transform(hr), self.transform(lr), self.transform(cr), self.transform(mk)) for hr, lr, cr, mk in item]
+        item = [random_flip_and_rotate(hr, lr) for hr, lr in item]
+        return item
 
     def __len__(self):
         return len(self.hr)
