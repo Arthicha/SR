@@ -7,7 +7,7 @@ StreamingSR is a python program that . . .
 The program have been tested on two systems. The first one was with:
 * Window 10 operating system
 * Intel(R) Core(TM) i7-8750H CPU
-* NVIDIA GForce GTX 1050 GPU  \\
+* NVIDIA GForce GTX 1050 GPU  <br />
 The second one was with:
 * Window 10 operating system
 * Intel(R) Core(TM) i5-8500 CPU
@@ -28,7 +28,7 @@ The second one was with:
 
 These modules are mandatory:
 * [PyTorch](https://pytorch.org/) (tests with version 1.5.0+cu92)
-* [TorchVision](https://pytorch.org/) (tests with version 0.6.1+cu92) \\
+* [TorchVision](https://pytorch.org/) (tests with version 0.6.1+cu92) <br />
 To install Pytorch and TorchVision, use this command.
 
 ```bash
