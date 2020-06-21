@@ -7,7 +7,8 @@ StreamingSR is a python program that . . .
 The program have been tested on two systems. The first one was with:
 * Window 10 operating system
 * Intel(R) Core(TM) i7-8750H CPU
-* NVIDIA GForce GTX 1050 GPU\
+* NVIDIA GForce GTX 1050 GPU
+
 The second one was with:
 * Window 10 operating system
 * Intel(R) Core(TM) i5-8500 CPU
