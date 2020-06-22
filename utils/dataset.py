@@ -51,8 +51,7 @@ class TrainDataset(data.Dataset):
         self.resample()
 
     def resample(self):
-
-        file = self.h5f[str(np.random.randint(16, size=1)[0])]
+        file = self.h5f[str(np.random.randint(len(self.h5f.keys()), size=1)[0])]
 
         indx = np.random.choice(len(file), self.batch_size, replace=False)
         indx.sort()
