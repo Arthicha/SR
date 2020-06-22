@@ -73,24 +73,15 @@ To train the model, go to the project directory if you are in dataset directory,
 ```bash
 python train.py
 ```
-Note that, you can specify input arguements:
-** A
-** B
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
-### Usage
-
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
-```bash
-pip install foobar
-```
+Note that, you can specify following input arguements:
+* --ckpt_name : path and name of the checkpoint to be loaded (default 'checkpoint/checkpoint.pth')
+* --saved_ckpt_dir : directory that the new checkpoint will be saved to (default 'checkpoint/new')
+* --train_data_path : directory of the dataset in hdf5 format (default "dataset/DIV2K_train.h5")
+* --batch_size : batch size (default 1)
+* --update_every : number of batch to update the network weights (default 1)
+* --patch_size : size of training images (default 64)
+* --lr : learning rate (default 0.001)
+* --decay : decay rate of the learning rate (default 400000, halved every 400000 epoch)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

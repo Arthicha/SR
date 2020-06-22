@@ -27,7 +27,7 @@ class Solver():
         self.epoch = 0
         if cfg.ckpt_name != 'None':
             self.load(cfg.ckpt_name)
-        self.step = self.epoch*cfg.print_interval
+        self.step = self.epoch*cfg.update_every
         learning_rate = self.decay_learning_rate()
 
         #for param_group in self.optim.param_groups:
@@ -40,7 +40,7 @@ class Solver():
             num_params = sum(p.numel() for p in self.refiner.parameters() if p.requires_grad)
             print("# of params:", num_params)
 
-        os.makedirs(cfg.ckpt_dir, exist_ok=True)
+        os.makedirs(cfg.saved_ckpt_dir, exist_ok=True)
 
 
     def fit(self):
@@ -60,11 +60,11 @@ class Solver():
             
             if 1:
                 sr = self.refiner(lr)
-                l1loss = self.loss_fn(sr, hr)/cfg.print_interval
+                l1loss = self.loss_fn(sr, hr)/cfg.update_every
                 loss = l1loss
                 loss.backward()
                 
-                if self.step % cfg.print_interval == 0:
+                if self.step % cfg.update_every == 0:
                     nn.utils.clip_grad_norm_(self.refiner.parameters(), cfg.clip)
                     self.optim.step()
                     self.refiner.zero_grad()
@@ -78,9 +78,9 @@ class Solver():
                 cv2.imshow('hr',deTransform(hr[:1]))
                 cv2.waitKey(1)
                 self.step += 1
-                if cfg.verbose and self.step % (cfg.print_interval*10) == 0:
+                if cfg.verbose and self.step % (cfg.update_every*10) == 0:
                     print('epoch', self.epoch, 'l1_loss', l1loss.item())
-                    if cfg.verbose and self.step % (cfg.print_interval*100) == 0:
+                    if cfg.verbose and self.step % (cfg.update_every*100) == 0:
                         self.save()
 
     
@@ -94,7 +94,7 @@ class Solver():
         self.refiner.load_state_dict(state_dict)
 
     def save(self):
-        torch.save(self.refiner.state_dict(), self.cfg.ckpt_dir+'/checkpoint_e'+str(self.epoch)+'.pth')
+        torch.save(self.refiner.state_dict(), self.cfg.saved_ckpt_dir+'/checkpoint_e'+str(self.epoch)+'.pth')
 
     def decay_learning_rate(self):
         lr = self.cfg.lr * (0.5 ** (self.epoch // self.cfg.decay))
