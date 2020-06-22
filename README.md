@@ -50,23 +50,32 @@ pip install opencv-python==4.0.1.24 numpy==1.18.2 pygame==1.9.6 pyopengl==3.1.0 
 ```
 
 
-
 ## Training
+
+
+### Preparing Training Data
 
 Download the [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) dataset and run the following command to convert the training dataset to hierarchical data format (hdf5, .h5)
 
 ```bash
+cd dataset
 python generateH5.py --dataset_folder your_dataset_folder --hdf5_name hdf5_name --num_per_group data_amount_per_group
 ```
 
 If the arguments aren't specified your_dataset_folder, hdf5_name, and data_amount_per_group are "DIV2K_train", "DIV2K_trainx.h5", and 50, respectively.
 
+Or download the training data stored in a hierarchical data format (hdf5, .h5) from [google drive](https://drive.google.com/file/d/1UwCPo3V6x80sELU9VPk-aiS_Eq3e4CG4/view?usp=sharing)
 
+### Training The Model
 
+To train the model, go to the project directory if you are in dataset directory, and then run the following command:
 
-
-Or
-Download the training data stored in a hierarchical data format (hdf5, .h5) from [google drive](https://drive.google.com/file/d/1UwCPo3V6x80sELU9VPk-aiS_Eq3e4CG4/view?usp=sharing)
+```bash
+python train.py
+```
+Note that, you can specify input arguements:
+** A
+** B
 
 ```python
 import foobar
