@@ -6,6 +6,11 @@ StreamingSR is a python program that . . .
 ![](gif/newyork.gif)
 ![](gif/people.gif)
 
+<div align="center">
+<img src="gif/people.gif" >
+<p>Perfectly balanced</p>
+</div>
+
 ## Tested System
 
 The program have been tested on two systems. The first one was with:
