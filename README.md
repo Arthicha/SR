@@ -3,6 +3,7 @@
 StreamingSR is a python program that . . .
 
 ## Result
+![](newyork.gif)
 
 ## Tested System
 
