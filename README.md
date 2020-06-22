@@ -83,5 +83,15 @@ Note that, you can specify following input arguements:
 * --lr : learning rate (default 0.001)
 * --decay : decay rate of the learning rate (default 400000, halved every 400000 epoch)
 
+
+## Streaming
+
+### Build SpoutSDK
+
+If you use python with different version, you have to build new spoutSDK. Please follow [this tutorial](https://rusin.work/vjing/tools/spout-for-python/?fbclid=IwAR2-7DcQUpr4SqxAqM5LkWbYCu3RPgEMsNQ5MuAbW6JwzyHCYtoqrOqoEfQ). After complete this, you will get a file name "SpoutSDK.pyd" and you shall replace the file given in the project with the new one.
+
+
+
+
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
