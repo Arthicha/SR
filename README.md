@@ -102,6 +102,8 @@ If you use python with different version, you have to build new spoutSDK. Please
 
 ### Sender
 
+Download the testing videos from [google drive](https://drive.google.com/drive/folders/1l9kyQgK2v6XYmUR_JJ2SMgLETVyRN-VD?usp=sharing) or [free videos](https://www.pexels.com/videos/) , and run this command:
+
 ```bash
 python send.py --host ip --method method --video path_to_your_video --nthread number_of_streaming_thread --jpg_quality compression_quality
 ```
