@@ -3,12 +3,15 @@
 StreamingSR is a python program that . . .
 
 ## Result
-![](gif/newyork.gif)
-![](gif/people.gif)
+
+<div align="center">
+<img src="gif/newyork.gif" >
+<p>Example 1 from newyork.mp4 </p>
+</div>
 
 <div align="center">
 <img src="gif/people.gif" >
-<p>Perfectly balanced</p>
+<p>Example 2 from people.mp4 </p>
 </div>
 
 ## Tested System
