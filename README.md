@@ -2,7 +2,7 @@
 
 StreamingSR is a python program that . . .
 
-## Result
+## Results
 
 <div align="center">
 <img src="gif/newyork.gif" >
@@ -74,8 +74,6 @@ cd dataset
 python generateH5.py --dataset_folder your_dataset_folder --hdf5_name hdf5_name --num_per_group data_amount_per_group
 ```
 
-If the arguments aren't specified your_dataset_folder, hdf5_name, and data_amount_per_group are "DIV2K_train", "DIV2K_trainx.h5", and 50, respectively.
-
 Or download the training data stored in a hierarchical data format (hdf5, .h5) from [google drive](https://drive.google.com/file/d/1UwCPo3V6x80sELU9VPk-aiS_Eq3e4CG4/view?usp=sharing)
 
 ### Training The Model
@@ -102,6 +100,27 @@ Note that, you can specify following input arguements:
 
 If you use python with different version, you have to build new spoutSDK. Please follow [this tutorial](https://rusin.work/vjing/tools/spout-for-python/?fbclid=IwAR2-7DcQUpr4SqxAqM5LkWbYCu3RPgEMsNQ5MuAbW6JwzyHCYtoqrOqoEfQ). After complete this, you will get a file name "SpoutSDK.pyd" and you shall replace the file given in the project with the new one.
 
+### Sender
+
+```bash
+python send.py --host ip --method method --video path_to_your_video --nthread number_of_streaming_thread --jpg_quality compression_quality
+```
+
+Note that, you can specify following input arguements:
+* --method : method to be used, either with 'sr' (with superresolution) or 'hr' (without superresolution, send high-resolution iamge instead) (default 'sr')
+* --host : ip (default 'localhost')
+* --port : port (default "1112")
+* --image_width : image width (default 1280)
+* --image_height : image height (default 960)
+* --use_saved_video : use saved video or webcam, 'True'/'1'/'T' for saved video and 'False'/'0'/'F' for video from webcam (default True)
+* --video : path to saved video (default './dataset/Video/people.mp4')
+* --video_maxframe : length of saved video (default 100 frames)
+* --scale : downscaling factor (default 4)
+* --nthread : number of thread in video streaming (default 8)
+* --jpg_quality : quality of jpg compression 1-100 (default 50)
+* --max_sender_fps : maximum speed (frame per second) of the sender (default 1/24)
+* --max_video_fps : video updating/reading speed (default 1/24)
+* --sock_buff_size : buffer size (default 20480)
 
 
 
