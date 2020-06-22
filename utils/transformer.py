@@ -3,9 +3,7 @@ import numpy as np
 import cv2
 
 def Transform(im,halfprecision=False):
-	print(im.shape)
 	im = torch.FloatTensor(im).cuda()/255
-	print(im.shape)
 	im = im.unsqueeze(0).permute(0,3,1,2)
 	if halfprecision:
 		im = im.half()

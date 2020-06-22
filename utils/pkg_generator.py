@@ -3,8 +3,6 @@ import cv2
 import numpy as np
 import math
 
-
-
 def sendPackage(sock,img,cfg,start_pkg_num=0):
 	NUM_BYTES = 0
 	PROTOCOL_DATA_DELIMITER=b"[HEADER]"
