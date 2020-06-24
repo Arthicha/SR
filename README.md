@@ -114,12 +114,12 @@ Note that, you can specify following input arguements:
 * --port : port (default "1112")
 * --image_width : image width (default 1280)
 * --image_height : image height (default 960)
-* --use_saved_video : use saved video or webcam, 'True'/'1'/'T' for saved video and 'False'/'0'/'F' for video from webcam (default True)
-* --video : path to saved video (default './dataset/Video/people.mp4')
-* --video_maxframe : length of saved video (default 100 frames)
 * --scale : downscaling factor (default 4)
 * --nthread : number of thread in video streaming (default 8)
 * --jpg_quality : quality of jpg compression 1-100 (default 50)
+* --use_saved_video : use saved video or webcam, 'True'/'1'/'T' for saved video and 'False'/'0'/'F' for video from webcam (default True)
+* --video : path to saved video (default './dataset/Video/people.mp4')
+* --video_maxframe : length of saved video (default 100 frames)
 * --max_sender_fps : maximum speed (frame per second) of the sender (default 1/24)
 * --max_video_fps : video updating/reading speed (default 1/24)
 * --sock_buff_size : buffer size (default 20480)
@@ -132,6 +132,36 @@ After runny sender.py, a video will pop up and command line will displays three 
 <div align="center">
 <img src="pictures/cmd_sender.jpg" >
 <p> Result after running sender.py </p>
+</div>
+
+
+### Receiver
+
+After the sender is started, run this command:
+
+```bash
+python receiver.py --host ip --method method --nthread number_of_streaming_thread
+```
+
+Note that, you can specify following input arguements:
+* --method : method to be used, either with 'sr' (with superresolution) or 'hr' (without superresolution, send high-resolution iamge instead) (default 'sr')
+* --host : ip (default '127.0.0.1')
+* --port : port (default "1112")
+* --image_width : image width (default 1280)
+* --image_height : image height (default 960)
+* --scale : downscaling factor (default 4)
+* --nthread : number of thread in video streaming (default 8)
+* --max_receiver_fps : maximum speed (frame per second) of the receiver (default 1/24)
+* --half_precision : use model with half precision or not, 'True'/'1'/'T' or 'False'/'0'/'F' (default True)
+* --save_video : save the output as video or not, 'True'/'1'/'T' or 'False'/'0'/'F' (default False)
+* --video_name : name of the saved video (default 'output.avi')
+* --save_nframe : length of the saved video in the unit of frames (default 100)
+
+After runny receiver.py, a video will pop up and command line will displays the average frame per second every 100 frames
+
+<div align="center">
+<img src="pictures/cmd_receiver.jpg" >
+<p> Result after running receiver.py </p>
 </div>
 
 

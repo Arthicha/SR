@@ -27,6 +27,7 @@ parser.add_argument("--max_receiver_fps", type=float, default=1/24)
 parser.add_argument("--half_precision", type=str,choices=TRUE+FALSE, default='True')
 parser.add_argument("--save_video", type=str,choices=TRUE+FALSE, default='False')
 parser.add_argument("--save_nframe", type=int,default=100)
+parser.add_argument("--video_name",type=str,default='output.avi')
 parser.add_argument("--verbose", type=str,choices=TRUE+FALSE, default='True')
 cfg = parser.parse_args()
 
@@ -43,6 +44,8 @@ if cfg.method == 'sr':
 
 EXIT = False
 NUM_FRAME = 0
+STATS = [-1.0]
+GAMMA = 0.01
 
 ''' INITIAIZE PYGAME AND SPOUT'''
 width = 800//800
@@ -80,7 +83,7 @@ print("Initialized socket {}:{} ...".format(cfg.host, cfg.port))
 print("Socket receiving buffer size = ", bufsize)
 print("Waiting for data ...")
 
-saver = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 24, (cfg.image_width,cfg.image_height)) if cfg.save_video in TRUE else None
+saver = cv2.VideoWriter(cfg.video_name,cv2.VideoWriter_fourcc('M','J','P','G'), 24, (cfg.image_width,cfg.image_height)) if cfg.save_video in TRUE else None
 
 ''' CREATE EMPTY IMAGES '''
 IMAGE   = np.zeros((cfg.image_height//cfg.scale, cfg.image_width//cfg.scale,3), np.uint8) if cfg.method == 'sr' else np.zeros((cfg.image_height, cfg.image_width,3), np.uint8)
@@ -142,7 +145,6 @@ def PkgReader():
 thread  = threading.Thread(target=PkgReader)
 thread.start()
 
-t_start = time.perf_counter()
 while(1):
     t_begin = time.perf_counter()
     hr = IMAGE
@@ -184,7 +186,14 @@ while(1):
 
     NUM_FRAME += 1
 
-    print(NUM_FRAME/(time.perf_counter()-t_start), 'fps') if (cfg.verbose in TRUE) and (NUM_FRAME%100 == 0) else None
+    
+    if cfg.verbose in TRUE:
+        t = (time.perf_counter()-t_begin)
+        STATS[0] = (1.0-GAMMA)*STATS[0] + GAMMA*(1.0/t) if STATS[0] >= 0.0 else 1.0/t
+        if NUM_FRAME %100 == 0:
+            print('---------------------------------------------------------------')
+            print('Frame Rate',STATS[0],'FPS')
+            NUM_FRAME = 0
 
     if cv2.waitKey(1) & 0xff == 27:
         print("Esc is pressed.\nExit")

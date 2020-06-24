@@ -94,9 +94,9 @@ while(1):
     if cfg.verbose in TRUE:
         NUM_FRAME += 1
         t = (time.perf_counter()-t_begin)
-        STATS[0] = (1.0-GAMMA)*STATS[0] + GAMMA*(1e-6*NUM_BYTES/t) if STATS[0] >= 0.0 else GAMMA*(1e-6*NUM_BYTES/t)
-        STATS[1] = (1.0-GAMMA)*STATS[1] + GAMMA*(1.0/t) if STATS[1] >= 0.0 else GAMMA*(1.0/t)
-        STATS[2] = (1.0-GAMMA)*STATS[2] + GAMMA*(1e-3*NUM_BYTES) if STATS[2] >= 0.0 else GAMMA*(1e-3*NUM_BYTES)
+        STATS[0] = (1.0-GAMMA)*STATS[0] + GAMMA*(1e-6*NUM_BYTES/t) if STATS[0] >= 0.0 else (1e-6*NUM_BYTES/t)
+        STATS[1] = (1.0-GAMMA)*STATS[1] + GAMMA*(1.0/t) if STATS[1] >= 0.0 else (1.0/t)
+        STATS[2] = (1.0-GAMMA)*STATS[2] + GAMMA*(1e-3*NUM_BYTES) if STATS[2] >= 0.0 else (1e-3*NUM_BYTES)
         NUM_BYTES = 0
         if NUM_FRAME %100 == 0:
             print('---------------------------------------------------------------')
