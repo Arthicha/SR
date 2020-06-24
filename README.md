@@ -2,6 +2,7 @@
 
 The second prototype of an AI for video streaming. On the sender, the center of the high resolution image/frame is cropped, and then the high resolution image is downscaled with the factor of 4. After that, the cropped image and the downscale image go through existing image compression (in this case JPG compression) before they are sent. On the receiver, data is decoded. The downscaled image is upscaled using image super resolution neural network. Finally, the output combines with the cropped image.
 
+
 ## Results
 
 <div align="center">
@@ -26,6 +27,17 @@ The second one was with:
 * Intel(R) Core(TM) i5-8500 CPU
 * NVIDIA GForce RTX 2080 SUPER
 
+## Performance
+
+<div align="center">
+<img src="pictures/performance.JPG" >
+<p>Performance of the method with super resolution comparing with that of the method without super resolution </p>
+</div>
+
+Note that the experiment was performed on the second tested system 
+* vertical axis : frame rate (fps)
+* horizontal axis : network activity (GBps) 
+* size : size of data (KB)
 
 ## Prerequisite
 
@@ -64,6 +76,7 @@ pip install opencv-python==4.0.1.24 numpy==1.18.2 pygame==1.9.6 pyopengl==3.1.0 
 
 ## Training
 
+The super resolution neural network was modified from [CARN](https://github.com/nmhkahn/CARN-pytorch).
 
 ### Preparing Training Data
 
