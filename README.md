@@ -160,7 +160,7 @@ Note that, you can specify following input arguements:
 After runny receiver.py, a video will pop up and command line will displays the average frame per second every 100 frames
 
 <div align="center">
-<img src="pictures/cmd_receiver.jpg" >
+<img src="pictures/cmd_receiver.JPG" >
 <p> Result after running receiver.py </p>
 </div>
 
