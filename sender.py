@@ -38,6 +38,8 @@ EXIT = False
 
 NUM_BYTES = 0
 NUM_FRAME = 0
+STATS = [-1.0,-1.0,-1.0]
+GAMMA = 0.01
 
 CAP = None
 FRAME = np.zeros((cfg.image_height,cfg.image_width,3))
@@ -65,7 +67,7 @@ def VideoReader():
 thread  = threading.Thread(target=VideoReader)
 thread.start()
 
-t_start = time.perf_counter() # for counting average fps
+
 while(1):
     t_begin = time.perf_counter()
 
@@ -91,8 +93,14 @@ while(1):
 
     if cfg.verbose in TRUE:
         NUM_FRAME += 1
+        t = (time.perf_counter()-t_begin)
+        STATS[0] = (1.0-GAMMA)*STATS[0] + GAMMA*(1e-6*NUM_BYTES/t) if STATS[0] >= 0.0 else GAMMA*(1e-6*NUM_BYTES/t)
+        STATS[1] = (1.0-GAMMA)*STATS[1] + GAMMA*(1.0/t) if STATS[1] >= 0.0 else GAMMA*(1.0/t)
+        STATS[2] = (1.0-GAMMA)*STATS[2] + GAMMA*(1e-3*NUM_BYTES) if STATS[2] >= 0.0 else GAMMA*(1e-3*NUM_BYTES)
+        NUM_BYTES = 0
         if NUM_FRAME %100 == 0:
             print('---------------------------------------------------------------')
-            print('Throughput',1e-6*NUM_BYTES/(time.perf_counter()-t_start),'MBps')
-            print('Frame Rate', NUM_FRAME/(time.perf_counter()-t_start), 'fps')
-            print('Byte Per Frame',NUM_BYTES/NUM_FRAME)
+            print('Throughput',STATS[0],'MBps')
+            print('Frame Rate', STATS[1], 'FPS')
+            print('Size',STATS[2],'KB')
+            NUM_FRAME = 0
