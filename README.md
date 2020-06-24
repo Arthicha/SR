@@ -124,6 +124,15 @@ Note that, you can specify following input arguements:
 * --max_video_fps : video updating/reading speed (default 1/24)
 * --sock_buff_size : buffer size (default 20480)
 
+After runny sender.py, a video will pop up and command line will displays three figures every 100 frames:
+* Throughput : Amount of data (mega bytes) that is send in one second (mega bytes per second; MBps)
+* Frame Rate (frame per second; fps)
+* Bytes Per Frame : Size of an image/a frame (bytes)
+
+<div align="center">
+<img src="pictures/cmd_sender.jpg" >
+<p> Result after running sender.py </p>
+</div>
 
 
 ## License
