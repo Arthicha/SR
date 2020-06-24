@@ -78,7 +78,7 @@ pip install opencv-python==4.0.1.24 numpy==1.18.2 pygame==1.9.6 pyopengl==3.1.0 
 
 The super resolution neural network was modified from [CARN](https://github.com/nmhkahn/CARN-pytorch).
 
-### Preparing Training Data
+### Preparing The Training Data
 
 Download the [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) dataset and run the following command to convert the training dataset to hierarchical data format (hdf5, .h5)
 
@@ -183,6 +183,8 @@ To perfrom a priliminaty test, you can view the output from spout. First, go to 
 <img src="pictures/spout_receiver.JPG" >
 <p> Result after running Spout as receiver </p>
 </div>
+
+If there is a problem, please create a new issue or email me.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
