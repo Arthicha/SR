@@ -1,6 +1,6 @@
 # StreamingSR
 
-StreamingSR is a python program that . . .
+The second prototype of an AI for video streaming. On the sender, the center of the high resolution image/frame is cropped, and then the high resolution image is downscaled with the factor of 4. After that, the cropped image and the downscale image go through existing image compression (in this case JPG compression) before they are sent. On the receiver, data is decoded. The downscaled image is upscaled using image super resolution neural network. Finally, the output combines with the cropped image.
 
 ## Results
 
