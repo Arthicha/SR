@@ -164,6 +164,12 @@ After runny receiver.py, a video will pop up and command line will displays the 
 <p> Result after running receiver.py </p>
 </div>
 
+To perfrom a priliminaty test, you can view the output from spout. First, go to the directory the you have installed "Spout2" or click "Spout 2.006" locating on the desktop. Then go to "DEMO" and run "SpoutReceiver". Finally, select the spout sender by go to "File" and "Select Sender", and the output video will display on Spout. 
+
+ <div align="center">
+<img src="pictures/spout_receiver.JPG" >
+<p> Result after running Spout as receiver </p>
+</div>
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
