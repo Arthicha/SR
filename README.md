@@ -43,16 +43,27 @@ Note that XX/YY represents using method XX with jpg compression quality YY, and 
 ### Directory
 
 ```bash
-├── dir1
-│   ├── file11.ext
-│   └── file12.ext
-├── dir2
-│   ├── file21.ext
-│   ├── file22.ext
-│   └── file23.ext
-├── dir3
-├── file_in_root.ext
-└── README.md
+├── checkpoint\*
+│   ├── new (path for your new checkpoint saved during training)
+│   └── checkpoint.pth
+├── dataset\*
+│   ├── DIV2K_train
+│   │   ├── 0001.png
+│   │   ├── 0002.png
+│   │   └── ...
+│   ├── Video
+│   │   ├── people.mp4
+│   │   └── ...
+│   ├── generateH5.py
+│   └── mask.png
+├── gif
+├── model
+├── utils
+├── README.MD
+├── SpoutSDK (for python 3.6)
+├── receiver.py
+├── sender.py
+└── train.py
 ```
 
 
