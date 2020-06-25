@@ -43,10 +43,10 @@ Note that XX/YY represents using method XX with jpg compression quality YY, and 
 ### Directory
 
 ```bash
-├── checkpoint\*
+├── checkpoint*
 │   ├── new (path for your new checkpoint saved during training)
 │   └── checkpoint.pth
-├── dataset\*
+├── dataset*
 │   ├── DIV2K_train
 │   │   ├── 0001.png
 │   │   ├── 0002.png
@@ -54,6 +54,7 @@ Note that XX/YY represents using method XX with jpg compression quality YY, and 
 │   ├── Video
 │   │   ├── people.mp4
 │   │   └── ...
+│   ├── DIV2K_train.h5
 │   ├── generateH5.py
 │   └── mask.png
 ├── gif
