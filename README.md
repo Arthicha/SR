@@ -40,11 +40,30 @@ Note that XX/YY represents using method XX with jpg compression quality YY, and 
 * horizontal axis : network activity (GBps) 
 * size : size of data (KB)
 
+### Directory
+
+```bash
+├── dir1
+│   ├── file11.ext
+│   └── file12.ext
+├── dir2
+│   ├── file21.ext
+│   ├── file22.ext
+│   └── file23.ext
+├── dir3
+├── file_in_root.ext
+└── README.md
+```
+
+
 ## Prerequisite
 
 ### Applications & Programs
 
 * [Python 3.6.5](https://www.python.org/downloads/release/python-365/)
+
+If your python is not 3.6, you have to build new SpoutSDK and firstly installed these:
+
 * [Spout 2.006](https://spout.zeal.co/)
 * [Visual Studio](https://visualstudio.microsoft.com/downloads/)
 * [Boost](https://www.boost.org/)
@@ -81,7 +100,7 @@ The super resolution neural network was modified from [CARN](https://github.com/
 
 ### Preparing The Training Data
 
-Download the [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) dataset and run the following command to convert the training dataset to hierarchical data format (hdf5, .h5)
+Download the [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/) dataset. Put the download dataset in the "dataset" folder and run the following command to convert the training dataset to hierarchical data format (hdf5, .h5)
 
 ```bash
 cd dataset
@@ -116,7 +135,7 @@ If you use python with different version, you have to build new spoutSDK. Please
 
 ### Sender
 
-Download the testing videos from [google drive](https://drive.google.com/drive/folders/1l9kyQgK2v6XYmUR_JJ2SMgLETVyRN-VD?usp=sharing) or [free videos](https://www.pexels.com/videos/) , and run this command:
+Download the testing videos from [google drive](https://drive.google.com/drive/folders/1l9kyQgK2v6XYmUR_JJ2SMgLETVyRN-VD?usp=sharing) or [free videos](https://www.pexels.com/videos/). Put the "Video" folder in the "dataset" folder, and run this command:
 
 ```bash
 python send.py --host ip --method method --video path_to_your_video --nthread number_of_streaming_thread --jpg_quality compression_quality
