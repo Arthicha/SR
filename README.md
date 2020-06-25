@@ -34,7 +34,8 @@ The second one was with:
 <p>Performance of the method with super resolution comparing with that of the method without super resolution </p>
 </div>
 
-Note that the experiment was performed on the second tested system 
+
+Note that XX/YY represents using method XX with jpg compression quality YY, and the experiment was performed on the second tested system 
 * vertical axis : frame rate (fps)
 * horizontal axis : network activity (GBps) 
 * size : size of data (KB)
