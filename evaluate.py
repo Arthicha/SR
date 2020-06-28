@@ -35,6 +35,7 @@ if cfg.method in SR_METHODS:
 	elif cfg.method == 'vdsr':
 		sys.path.append('model')
 		neural_net = torch.load('checkpoint/vdsr.pth')["model"]
+		neural_net.cuda()
 	elif cfg.method == 'edsr':
 		neural_net = edsr().cuda()
 		neural_net.load_state_dict(torch.load("checkpoint/edsr.pth"))

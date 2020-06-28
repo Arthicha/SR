@@ -5,18 +5,25 @@ import torch.nn as nn
 import numpy as np
 import cv2, socket, math, time, sys, os, threading, pygame, argparse, copy
 from model.refiner import Net as model
+from model.FSRCNN import FSRCNN as fsrcnn
+from model.vdsr import Net as vdsr
+from model.edsr import EDSR as edsr
+from model.carn_m import Net as carn
 from utils.transformer import Transform,deTransform
 import SpoutSDK
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from pygame.locals import *
 from PIL import Image
+from utils.fsrcnn_utils import preprocess, convert_ycbcr_to_rgb
+from utils.imresize import imresize
 
 ''' DEFINE ARGUMENT PARSER'''
 TRUE = ["True","true",'t','T','1']
 FALSE = ["False",'false''f','F','0']
+SR_METHODS = ['sr','fsrcnn','vdsr','edsr','carn']
 parser = argparse.ArgumentParser()
-parser.add_argument("--method", type=str,choices=["sr", "hr"], default="sr")
+parser.add_argument("--method", type=str,choices=["vdsr","sr","fsrcnn", "hr",'edsr','carn'], default="sr")
 parser.add_argument("--host", type=str, default="127.0.0.1")
 parser.add_argument("--port", type=int, default=1112)
 parser.add_argument("--image_width", type=int, default=1280)
@@ -35,9 +42,22 @@ MASK = cv2.imread('./dataset/mask.png')
 MASK = cv2.resize(MASK,(cfg.image_width,cfg.image_height))
 MASK = Transform(MASK)
 
-if cfg.method == 'sr':
-    neural_net = model().cuda()
-    neural_net.load_state_dict(torch.load("checkpoint/checkpoint.pth"))
+if cfg.method in SR_METHODS:
+    if cfg.method == 'sr':
+        neural_net = model().cuda()
+        neural_net.load_state_dict(torch.load("checkpoint/checkpoint.pth"))
+    elif cfg.method == 'fsrcnn':
+        neural_net = fsrcnn().cuda()
+        neural_net.load_state_dict(torch.load("checkpoint/fsrcnn.pth"))
+    elif cfg.method == 'vdsr':
+        sys.path.append('model')
+        neural_net = torch.load('checkpoint/vdsr.pth')["model"]
+    elif cfg.method == 'edsr':
+        neural_net = edsr().cuda()
+        neural_net.load_state_dict(torch.load("checkpoint/edsr.pth"))
+    elif cfg.method == 'carn':
+        neural_net = carn().cuda()
+        neural_net.load_state_dict(torch.load("checkpoint/carn_m.pth"))
     neural_net.eval()
     neural_net.half() if cfg.half_precision in TRUE else None
 
@@ -86,7 +106,7 @@ print("Waiting for data ...")
 saver = cv2.VideoWriter(cfg.video_name,cv2.VideoWriter_fourcc('M','J','P','G'), 24, (cfg.image_width,cfg.image_height)) if cfg.save_video in TRUE else None
 
 ''' CREATE EMPTY IMAGES '''
-IMAGE   = np.zeros((cfg.image_height//cfg.scale, cfg.image_width//cfg.scale,3), np.uint8) if cfg.method == 'sr' else np.zeros((cfg.image_height, cfg.image_width,3), np.uint8)
+IMAGE   = np.zeros((cfg.image_height//cfg.scale, cfg.image_width//cfg.scale,3), np.uint8) if cfg.method in SR_METHODS else np.zeros((cfg.image_height, cfg.image_width,3), np.uint8)
 CENTER   = np.zeros((cfg.image_height, cfg.image_width, 3), np.uint8)
 
 def PkgReader():
@@ -123,16 +143,18 @@ def PkgReader():
                     if (package_number >= 0) and (package_number < (2*cfg.nthread+1)):
                         data_extract    = SOCKET_BUFFER_DATA[index_begin + len(PROTOCOL_DATA_DELIMITER) + 1:index_end]
                         if len(data_extract) > 0:
-                            img     = cv2.imdecode(np.frombuffer(data_extract, np.uint8), cv2.IMREAD_COLOR)  # image decode
-                            if (package_number < cfg.nthread) and (img is not None): # center
-                                img_height_per_pkg  = cfg.image_height// (2*cfg.nthread)
-                                img_py_start        = cfg.image_height//4 + int(package_number * img_height_per_pkg)
-                                CENTER[img_py_start:img_py_start+img_height_per_pkg,cfg.image_width//4:3*cfg.image_width//4,:] = img
-                            elif (package_number >= cfg.nthread) and (img is not None): # LR
-                                img_height_per_pkg  = cfg.image_height//(cfg.scale*cfg.nthread) if cfg.method == 'sr' else cfg.image_height//cfg.nthread
-                                img_py_start        = (package_number-cfg.nthread) * img_height_per_pkg
-                                IMAGE[img_py_start:img_py_start + img_height_per_pkg, :,:]  = img
-                    SOCKET_BUFFER_DATA  = SOCKET_BUFFER_DATA[index_end:]
+                            data_extract = np.frombuffer(data_extract, np.uint8)
+                            if 1:
+                                img     = cv2.imdecode(np.frombuffer(data_extract, np.uint8), cv2.IMREAD_COLOR)  # image decode   
+                                if (package_number < cfg.nthread) and (img is not None): # center
+                                    img_height_per_pkg  = cfg.image_height// (2*cfg.nthread)
+                                    img_py_start        = cfg.image_height//4 + int(package_number * img_height_per_pkg)
+                                    CENTER[img_py_start:img_py_start+img_height_per_pkg,cfg.image_width//4:3*cfg.image_width//4,:] = img
+                                elif (package_number >= cfg.nthread) and (img is not None): # LR
+                                    img_height_per_pkg  = cfg.image_height//(cfg.scale*cfg.nthread) if cfg.method in SR_METHODS else cfg.image_height//cfg.nthread
+                                    img_py_start        = (package_number-cfg.nthread) * img_height_per_pkg
+                                    IMAGE[img_py_start:img_py_start + img_height_per_pkg, :,:]  = img
+                        SOCKET_BUFFER_DATA  = SOCKET_BUFFER_DATA[index_end:]
                     index_begin = index_end = None
                 else:
                     break
@@ -148,15 +170,28 @@ thread.start()
 while(1):
     t_begin = time.perf_counter()
     hr = IMAGE
-
     ''' PERFORM SUPER RESOLUTION IF NECESSARY'''
-    if cfg.method == 'sr':
-        lr = Transform(hr)
-        hr = neural_net(lr.half() if cfg.half_precision else lr)
-        center = Transform(CENTER)
-        hr = center*(1-MASK) + hr*(MASK)
-        hr =deTransform(hr)
+    if cfg.method in SR_METHODS:
+        lr = hr
+        # preprocess
+        if cfg.method in ['fsrcnn','vdsr']:
+            if cfg.method == 'vdsr':
+                lr = cv2.resize(lr,(cfg.image_width,cfg.image_height),interpolation=cv2.INTER_CUBIC)
+            lr,ycbcr = preprocess(cv2.cvtColor(lr, cv2.COLOR_BGR2RGB))
 
+        lr = Transform(lr,halfprecision=True if cfg.half_precision in TRUE else False)
+        hr = neural_net(lr.half() if cfg.half_precision in TRUE else lr)
+        # postprocess
+        if cfg.method in ['fsrcnn','vdsr']:
+            hr = hr.clamp(0.0, 1.0)
+            ycbcr = Transform(cv2.resize(ycbcr,(hr.shape[-1],hr.shape[-2])))
+            ycbcr[:,:1,:,:] = hr
+            hr = convert_ycbcr_to_rgb(ycbcr*255)/255
+
+        #center = Transform(CENTER)
+        #hr = center*(1-MASK) + hr*(MASK)
+        hr =deTransform(hr)
+    cv2.imwrite('output.png',hr)
     ''' CONVERT IMAGE TO TEXTURE AND SEND THROUGH SPOUT '''
     glActiveTexture(GL_TEXTURE0)
     glClearColor(0.0,0.0,0.0,0.0)
@@ -174,7 +209,6 @@ while(1):
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, tx_image)
     glBindTexture(GL_TEXTURE_2D, 0)
     spoutSender.SendTexture(int(senderTextureID), GL_TEXTURE_2D, ix, iy, True, 0)
-
     cv2.imshow('image',hr)
 
 
@@ -186,6 +220,12 @@ while(1):
 
     NUM_FRAME += 1
 
+    if cv2.waitKey(1) & 0xff == 27:
+        print("Esc is pressed.\nExit")
+        print("Closing socket ...")
+        SOCK_CONN.close()
+        EXIT = True
+        sys.exit()
     
     if cfg.verbose in TRUE:
         t = (time.perf_counter()-t_begin)
@@ -195,12 +235,7 @@ while(1):
             print('Frame Rate',STATS[0],'FPS')
             NUM_FRAME = 0
 
-    if cv2.waitKey(1) & 0xff == 27:
-        print("Esc is pressed.\nExit")
-        print("Closing socket ...")
-        SOCK_CONN.close()
-        EXIT = True
-        sys.exit()
+    
 
     # reduce fps
     t_end   = time.perf_counter()
