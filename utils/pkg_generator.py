@@ -2,15 +2,18 @@ import socket
 import cv2
 import numpy as np
 import math
+import time
 
 def sendPackage(sock,img,cfg,start_pkg_num=0):
 	NUM_BYTES = 0
 	PROTOCOL_DATA_DELIMITER=b"[HEADER]"
 
+
 	for n_pkg in range(0,cfg.nthread):
 		img_height_per_pkg  = img.shape[0]//cfg.nthread
 		img_py_start = n_pkg * img_height_per_pkg
-		img_slice = img[img_py_start:img_py_start + img_height_per_pkg, :]
+		img_slice = img[img_py_start:img_py_start + img_height_per_pkg, :]#*0.0 + int(n_pkg*255/8)
+
 		img_jpeg = cv2.imencode(".jpg", img_slice, [cv2.IMWRITE_JPEG_QUALITY, cfg.jpg_quality])[1] # convert to jpg
 		HEADER_PKG_NUM = PROTOCOL_DATA_DELIMITER + bytes([n_pkg+start_pkg_num])
 		sock.send(HEADER_PKG_NUM)   # send HEADER
@@ -24,5 +27,6 @@ def sendPackage(sock,img,cfg,start_pkg_num=0):
 			sock.send(data_to_send)
 			if cfg.verbose:
 				NUM_BYTES += len(data_to_send) # count byte sent
+
 	return NUM_BYTES
 

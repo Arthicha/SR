@@ -39,14 +39,14 @@ class Net(nn.Module):
         self.carnchannel = 32
         
 
-        self.conv1_e = nn.Conv2d(1, self.carnchannel//2, 3, 1, 2, bias=False).to(self.device)
-        self.conv2 = nn.Conv2d(self.carnchannel//2, self.carnchannel//2, 3, 1, 1, bias=False).to(self.device)
+        #self.conv1_e = nn.Conv2d(1, self.carnchannel//2, 3, 1, 2, bias=False).to(self.device)
+        #self.conv2 = nn.Conv2d(self.carnchannel//2, self.carnchannel//2, 3, 1, 1, bias=False).to(self.device)
 
-        torch.nn.init.xavier_normal_(self.conv1_e.weight)
-        torch.nn.init.xavier_normal_(self.conv2.weight)
+        #torch.nn.init.xavier_normal_(self.conv1_e.weight)
+        #torch.nn.init.xavier_normal_(self.conv2.weight)
 
 
-        self.entry = nn.Conv2d(3, self.carnchannel//2, 3, 1, 1, bias=True).to(self.device)
+        self.entry = nn.Conv2d(3, self.carnchannel, 5, 1, 2, bias=True).to(self.device)
         torch.nn.init.xavier_normal_(self.entry.weight)
 
         self.b1 = Block(self.carnchannel, self.carnchannel).to(self.device)
@@ -71,12 +71,13 @@ class Net(nn.Module):
 
     def forward(self,lr ,coarse=False):
 
-        lr = F.leaky_relu(self.entry(lr),inplace=True)
+        sr = F.leaky_relu(self.entry(lr),inplace=True)
 
-        sr = torch.cat([lr,lr*0],dim=1)
         sr = self.carn(sr)
         sr = self.upsample(sr)
         sr = self.exit(sr)
+
+        sr = F.relu(sr+F.interpolate(lr,scale_factor=4,mode='bilinear'),inplace=True)
 
         return sr
 
